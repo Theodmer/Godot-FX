@@ -12,7 +12,7 @@ default_input_values = [2, true, 3, 4.0]
 code = "shader_type spatial;
 render_mode blend_add, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled, ambient_light_disabled;
 
-uniform vec4 Color : source_color = vec4(0.100000, 1.083928, 2.000000, 1.000000);
+uniform vec4 Color : source_color = vec4(0.100000, 1.083930, 2.000000, 1.000000);
 
 
 
@@ -33,7 +33,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-560.64, -46.08)
 modes/blend = 1
 flags/unshaded = true
 flags/shadows_disabled = true
