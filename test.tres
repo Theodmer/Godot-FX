@@ -1,0 +1,42 @@
+[gd_resource type="VisualShader" load_steps=3 format=3 uid="uid://wj4lbaf5vgdx"]
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_ykgt0"]
+constant = Color(2, 1, 1, 1)
+
+[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_7vleg"]
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_add, depth_draw_opaque, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled, ambient_light_disabled;
+
+
+
+
+void fragment() {
+// ColorConstant:2
+	vec4 n_out2p0 = vec4(2.000000, 1.000000, 1.000000, 1.000000);
+
+
+// Fresnel:3
+	float n_in3p3 = 1.00000;
+	float n_out3p0 = pow(1.0 - clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_in3p3);
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	ALPHA = n_out3p0;
+
+
+}
+"
+graph_offset = Vector2(-325.851, 69.12)
+modes/blend = 1
+modes/cull = 2
+flags/unshaded = true
+flags/shadows_disabled = true
+flags/ambient_light_disabled = true
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorConstant_ykgt0")
+nodes/fragment/2/position = Vector2(-240, 180)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFresnel_7vleg")
+nodes/fragment/3/position = Vector2(-260, 400)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 0, 1)

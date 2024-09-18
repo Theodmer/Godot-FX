@@ -1,0 +1,211 @@
+[gd_scene load_steps=32 format=3 uid="uid://dkubden7ypm7g"]
+
+[ext_resource type="Shader" uid="uid://7wgkayflsx3c" path="res://Assets/Shaders/S_Fireball_Fire.tres" id="1_6dy26"]
+[ext_resource type="ArrayMesh" uid="uid://btg7tt5e0t14h" path="res://Assets/Meshes/O_Fireball_Head.obj" id="2_sgsp8"]
+[ext_resource type="Shader" uid="uid://cgecwv1ck88bp" path="res://Assets/Shaders/S_Fireball_Ball.tres" id="3_71kpy"]
+[ext_resource type="Shader" uid="uid://r1odhlyigs8c" path="res://Assets/Shaders/S_Fireball_Tail.tres" id="4_ejaol"]
+[ext_resource type="Texture2D" uid="uid://cfo3s8bae4icp" path="res://Assets/Shaders/T_VFX_Basic_01.PNG" id="5_67ejp"]
+[ext_resource type="Shader" uid="uid://wj4lbaf5vgdx" path="res://test.tres" id="6_kgleb"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_kr1h4"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_rxaot"]
+seed = 1
+frequency = 0.0239
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xyev4"]
+seamless = true
+as_normal_map = true
+bump_strength = 1.3
+noise = SubResource("FastNoiseLite_rxaot")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_te0o2"]
+albedo_color = Color(0.100446, 0.0941528, 0.084079, 1)
+metallic = 1.0
+metallic_specular = 0.2
+roughness = 0.0
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_xyev4")
+uv1_scale = Vector3(2, 2, 2)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_hba0y"]
+material = SubResource("StandardMaterial3D_te0o2")
+size = Vector2(1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_080mk"]
+render_priority = 0
+shader = ExtResource("1_6dy26")
+shader_parameter/ColorParameter = Color(2, 0.6, 0, 1)
+shader_parameter/Fire_Speed = 1.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dwixl"]
+render_priority = 0
+shader = ExtResource("3_71kpy")
+shader_parameter/Color = Color(0, 0.7, 1.5, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_3r4uq"]
+material = SubResource("ShaderMaterial_dwixl")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g1d3i"]
+render_priority = 0
+shader = ExtResource("4_ejaol")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_bkb2p"]
+
+[sub_resource type="Curve" id="Curve_44nwu"]
+_data = [Vector2(0.0136555, 1), 0.0, 0.0, 0, 0, Vector2(0.614496, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_is208"]
+curve = SubResource("Curve_44nwu")
+
+[sub_resource type="Curve" id="Curve_15vh0"]
+_data = [Vector2(0.0115546, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.00176883), -3.37395, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_m5oor"]
+curve = SubResource("Curve_15vh0")
+
+[sub_resource type="Curve" id="Curve_gkuc2"]
+_data = [Vector2(0.0052521, 0.0125898), 0.0, 6.04224, 0, 0, Vector2(0.22374, 0.99459), 0.0, 0.0, 0, 0, Vector2(0.622899, 0.99459), 0.0, 0.0, 0, 0, Vector2(1, 0.0180002), -3.55871, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_nsblp"]
+curve = SubResource("Curve_gkuc2")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kcigj"]
+particle_flag_align_y = true
+emission_shape = 2
+emission_sphere_radius = 0.5
+direction = Vector3(0, 0, 1)
+spread = 0.0
+initial_velocity_min = 5.0
+initial_velocity_max = 7.0
+angular_velocity_min = -1.60933e-05
+angular_velocity_max = -1.60933e-05
+radial_velocity_min = 0.999978
+radial_velocity_max = 1.99998
+radial_velocity_curve = SubResource("CurveTexture_m5oor")
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_nsblp")
+color = Color(1.5, 0.8, 0, 1)
+alpha_curve = SubResource("CurveTexture_is208")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ydhih"]
+blend_mode = 1
+cull_mode = 2
+shading_mode = 0
+disable_ambient_light = true
+disable_fog = true
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_texture = ExtResource("5_67ejp")
+
+[sub_resource type="QuadMesh" id="QuadMesh_7mqda"]
+material = SubResource("StandardMaterial3D_ydhih")
+size = Vector2(0.1, 0.3)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_3m7yq"]
+sky_top_color = Color(0.0647321, 0.0647321, 0.0647321, 1)
+sky_horizon_color = Color(0.180804, 0.180804, 0.180804, 1)
+
+[sub_resource type="Sky" id="Sky_18slp"]
+sky_material = SubResource("ProceduralSkyMaterial_3m7yq")
+
+[sub_resource type="Environment" id="Environment_vi3mn"]
+background_mode = 2
+sky = SubResource("Sky_18slp")
+ambient_light_color = Color(1, 1, 1, 1)
+tonemap_mode = 1
+ssr_max_steps = 256
+ssil_normal_rejection = 0.5
+sdfgi_enabled = true
+sdfgi_use_occlusion = true
+sdfgi_min_cell_size = 0.0195312
+glow_enabled = true
+fog_light_color = Color(1, 1, 1, 1)
+fog_density = 0.0135
+fog_aerial_perspective = 1.0
+fog_sky_affect = 0.0
+fog_depth_begin = 0.0
+volumetric_fog_density = 0.0707
+volumetric_fog_albedo = Color(0.120536, 0.120536, 0.120536, 1)
+volumetric_fog_emission = Color(0.138393, 0.138393, 0.138393, 1)
+volumetric_fog_anisotropy = -0.3
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_sgcq2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ag3od"]
+render_priority = 0
+shader = ExtResource("6_kgleb")
+
+[sub_resource type="SphereMesh" id="SphereMesh_o06yh"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("WorldBoundaryShape3D_kr1h4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, -0.135531, 0.0508224, -0.0365124)
+gi_mode = 2
+mesh = SubResource("PlaneMesh_hba0y")
+
+[node name="Fireball" type="Node3D" parent="."]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0.114963, 0.469494, 0.352909)
+
+[node name="Head" type="MeshInstance3D" parent="Fireball"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00413477, 0.00837207, -0.000577569)
+material_override = SubResource("ShaderMaterial_080mk")
+gi_mode = 0
+mesh = ExtResource("2_sgsp8")
+skeleton = NodePath("../..")
+
+[node name="Ball" type="MeshInstance3D" parent="Fireball"]
+transform = Transform3D(1.12522, 0.00036138, 0.000559805, -0.000360988, 1.12522, -0.000747879, -0.000560058, 0.00074769, 1.12522, 0.00149071, 0.00983, -1.0405)
+gi_mode = 0
+mesh = SubResource("SphereMesh_3r4uq")
+
+[node name="Tail" type="MeshInstance3D" parent="Fireball"]
+transform = Transform3D(-2.58724e-08, 1, 0, -0.591891, -4.37114e-08, 0, 0, 0, 2.96159, -0.00552863, 0.0111909, 1.22126)
+material_override = SubResource("ShaderMaterial_g1d3i")
+mesh = SubResource("PlaneMesh_bkb2p")
+
+[node name="Tail2" type="MeshInstance3D" parent="Fireball"]
+transform = Transform3D(0.591891, -1.33227e-14, 0, -2.22045e-15, 1, 0, 0, 0, 2.96159, -0.00552863, 0.0111909, 1.22126)
+material_override = SubResource("ShaderMaterial_g1d3i")
+mesh = SubResource("PlaneMesh_bkb2p")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="Fireball"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16415, -0.00520539, -1.14216)
+amount = 10
+lifetime = 0.3
+explosiveness = 0.5
+process_material = SubResource("ParticleProcessMaterial_kcigj")
+draw_pass_1 = SubResource("QuadMesh_7mqda")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Fireball"]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, -1.24253)
+light_color = Color(2, 0.415, 0, 1)
+light_size = 0.1
+omni_range = 2.253
+omni_attenuation = 10.0
+omni_shadow_mode = 0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_vi3mn")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.693226, -0.288021, 0.660668, 0, 0.916677, 0.399629, -0.720721, -0.277033, 0.635464, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Capsule" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0240984, 0.528128, -2.07788)
+mesh = SubResource("CapsuleMesh_sgcq2")
+
+[node name="Capsule2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.551411, 0, 0, 0, 0.551411, 0, 0, 0, 0.551411, 0.541509, 0.142437, -3.47409)
+material_override = SubResource("ShaderMaterial_ag3od")
+mesh = SubResource("SphereMesh_o06yh")
