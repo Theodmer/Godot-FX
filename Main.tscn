@@ -5,8 +5,9 @@
 [ext_resource type="Shader" uid="uid://cgecwv1ck88bp" path="res://Assets/Shaders/S_Fireball_Ball.tres" id="3_71kpy"]
 [ext_resource type="Shader" uid="uid://r1odhlyigs8c" path="res://Assets/Shaders/S_Fireball_Tail.tres" id="4_ejaol"]
 [ext_resource type="Texture2D" uid="uid://cfo3s8bae4icp" path="res://Assets/Shaders/T_VFX_Basic_01.PNG" id="5_67ejp"]
-[ext_resource type="Shader" uid="uid://wj4lbaf5vgdx" path="res://test.tres" id="6_kgleb"]
-[ext_resource type="PackedScene" uid="uid://swfvq5cdcas1" path="res://Scenes/shooter.tscn" id="7_1qxjl"]
+[ext_resource type="Shader" uid="uid://bqv11oork3hdb" path="res://Assets/Shaders/S_Pilebunker_Head.tres" id="6_ano8k"]
+[ext_resource type="ArrayMesh" uid="uid://blipfqqcgn15q" path="res://Assets/Meshes/O_Pilebunker_Head.obj" id="7_lndx7"]
+[ext_resource type="Shader" uid="uid://cxlgbg4iyrx5d" path="res://Assets/Shaders/S_Pilebunker_Tail.tres" id="8_r86sq"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_kr1h4"]
 
@@ -21,7 +22,7 @@ bump_strength = 5.0
 noise = SubResource("FastNoiseLite_rxaot")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_te0o2"]
-albedo_color = Color(0.100446, 0.0941528, 0.084079, 1)
+albedo_color = Color(0.279018, 0.279018, 0.279018, 1)
 normal_enabled = true
 normal_texture = SubResource("NoiseTexture2D_xyev4")
 uv1_scale = Vector3(6, 6, 6)
@@ -103,24 +104,19 @@ albedo_texture = ExtResource("5_67ejp")
 material = SubResource("StandardMaterial3D_ydhih")
 size = Vector2(0.1, 0.3)
 
-[sub_resource type="Environment" id="Environment_1x2j6"]
-background_mode = 1
-background_color = Color(0.171875, 0.171875, 0.171875, 1)
-tonemap_mode = 3
-ssil_enabled = true
-sdfgi_use_occlusion = true
-glow_enabled = true
-glow_intensity = 0.63
-glow_strength = 0.86
-glow_bloom = 0.15
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_sgcq2"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ag3od"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cq7ys"]
 render_priority = 0
-shader = ExtResource("6_kgleb")
+shader = ExtResource("6_ano8k")
+shader_parameter/Inside_Color = Color(1, 1, 1, 1)
+shader_parameter/Outside_Color = Color(0.821, 0, 4, 1)
+shader_parameter/Fire_Speed = 2.0
 
-[sub_resource type="SphereMesh" id="SphereMesh_o06yh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gubdo"]
+render_priority = 0
+shader = ExtResource("8_r86sq")
+shader_parameter/Fire_Speed = 3.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_umns7"]
 
 [node name="Node3D" type="Node3D"]
 
@@ -175,21 +171,17 @@ omni_range = 2.253
 omni_attenuation = 10.0
 omni_shadow_mode = 0
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_1x2j6")
+[node name="Pilebunker" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0)
 
-[node name="Capsule" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0240984, 0.528128, -2.07788)
-mesh = SubResource("CapsuleMesh_sgcq2")
+[node name="Head" type="MeshInstance3D" parent="Pilebunker"]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 2, 0, 0)
+material_override = SubResource("ShaderMaterial_cq7ys")
+mesh = ExtResource("7_lndx7")
+metadata/_edit_group_ = true
 
-[node name="Capsule2" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.551411, 0, 0, 0, 0.551411, 0, 0, 0, 0.551411, 0.541509, 0.142437, -3.47409)
-material_override = SubResource("ShaderMaterial_ag3od")
-mesh = SubResource("SphereMesh_o06yh")
-
-[node name="Shooter" parent="." instance=ExtResource("7_1qxjl")]
-
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-0.0185344, 0, 0.999828, 0, 1, 0, -0.999828, 0, -0.0185344, 4.48196, 0.709935, -0.318125)
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="Tail" type="MeshInstance3D" parent="Pilebunker"]
+transform = Transform3D(-1.31482e-08, -0.400752, 0, 0.300795, -1.75174e-08, 0, 0, 0, 1.8153, 2, 0, 1.05924)
+material_override = SubResource("ShaderMaterial_gubdo")
+mesh = SubResource("PlaneMesh_umns7")
+skeleton = NodePath("../Head")
